@@ -1,0 +1,48 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - mysqlHost
+      - mysqlUser
+      - mysqlPassword
+    properties:
+      mysqlHost:
+        type: string
+        description: MySQL server hostname
+      mysqlPort:
+        type: number
+        default: 3306
+        description: MySQL server port
+      mysqlUser:
+        type: string
+        description: MySQL username
+      mysqlPassword:
+        type: string
+        description: MySQL password
+      mysqlDatabase:
+        type: string
+        description: Default database (optional)
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({
+      command: 'node',
+      args: ['./build/index.js'],
+      env: {
+        MYSQL_HOST: config.mysqlHost,
+        MYSQL_PORT: config.mysqlPort ? config.mysqlPort.toString() : '3306',
+        MYSQL_USER: config.mysqlUser,
+        MYSQL_PASSWORD: config.mysqlPassword,
+        MYSQL_DATABASE: config.mysqlDatabase || ''
+      }
+    })
+  exampleConfig:
+    mysqlHost: 127.0.0.1
+    mysqlPort: 3306
+    mysqlUser: test_user
+    mysqlPassword: test_password
+    mysqlDatabase: test_db
