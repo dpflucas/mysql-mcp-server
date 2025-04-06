@@ -1,4 +1,5 @@
 # MySQL Database Access MCP Server
+[![smithery badge](https://smithery.ai/badge/@dpflucas/mysql-mcp-server)](https://smithery.ai/server/@dpflucas/mysql-mcp-server)
 
 This MCP server provides read-only access to MySQL databases. It allows you to:
 
@@ -15,6 +16,14 @@ This MCP server provides read-only access to MySQL databases. It allows you to:
 - **Row limit**: Prevents excessive data return
 
 ## Installation
+
+### Installing via Smithery
+
+To install MySQL Database Access MCP Server for Claude AI automatically via [Smithery](https://smithery.ai/server/@dpflucas/mysql-mcp-server):
+
+```bash
+npx -y @smithery/cli install @dpflucas/mysql-mcp-server --client claude
+```
 
 ### Option 1: Install from NPM (Recommended)
 
