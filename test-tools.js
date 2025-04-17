@@ -46,8 +46,8 @@ const config = {
 };
 
 // Check required environment variables
-if (!config.user || !config.password) {
-  console.error('Error: MYSQL_USER and MYSQL_PASSWORD environment variables are required');
+if (!config.user) {
+  console.error('Error: MYSQL_USER environment variable is required');
   console.error('Example usage:');
   console.error('  MYSQL_USER=root MYSQL_PASSWORD=password node test-tools.js');
   process.exit(1);

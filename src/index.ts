@@ -33,6 +33,7 @@ try {
     host: config.host, 
     port: config.port, 
     user: config.user, 
+    password: config.password ? '********' : '(not provided)',
     database: config.database || '(default not set)' 
   });
   pool = createConnectionPool(config);

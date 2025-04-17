@@ -18,17 +18,28 @@ export function createConnectionPool(config: MySQLConfig): mysql.Pool {
   console.error('[Setup] Creating MySQL connection pool');
   
   try {
-    return mysql.createPool({
+    // Create connection options
+    const poolConfig: mysql.PoolOptions = {
       host: config.host,
       port: config.port,
       user: config.user,
-      password: config.password,
-      database: config.database,
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
       connectTimeout: DEFAULT_TIMEOUT,
-    });
+    };
+    
+    // Add password if provided
+    if (config.password !== undefined) {
+      poolConfig.password = config.password;
+    }
+    
+    // Add database if provided
+    if (config.database) {
+      poolConfig.database = config.database;
+    }
+    
+    return mysql.createPool(poolConfig);
   } catch (error) {
     console.error('[Error] Failed to create connection pool:', error);
     throw error;
@@ -98,7 +109,6 @@ export function getConfigFromEnv(): MySQLConfig {
   
   if (!host) throw new Error('MYSQL_HOST environment variable is required');
   if (!user) throw new Error('MYSQL_USER environment variable is required');
-  if (!password) throw new Error('MYSQL_PASSWORD environment variable is required');
   
   const port = portStr ? parseInt(portStr, 10) : 3306;
   

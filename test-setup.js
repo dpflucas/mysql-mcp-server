@@ -37,8 +37,8 @@ const TEST_DB = 'mcp_test_db';
 const TEST_TABLE = 'users';
 
 // Check required environment variables
-if (!config.user || !config.password) {
-  console.error('Error: MYSQL_USER and MYSQL_PASSWORD environment variables are required');
+if (!config.user) {
+  console.error('Error: MYSQL_USER environment variable is required');
   console.error('Example usage:');
   console.error('  MYSQL_USER=root MYSQL_PASSWORD=password node test-setup.js');
   process.exit(1);

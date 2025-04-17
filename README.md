@@ -45,7 +45,7 @@ The server requires the following environment variables:
 - `MYSQL_HOST`: Database server hostname
 - `MYSQL_PORT`: Database server port (default: 3306)
 - `MYSQL_USER`: Database username
-- `MYSQL_PASSWORD`: Database password
+- `MYSQL_PASSWORD`: Database password (optional, but recommended for secure connections)
 - `MYSQL_DATABASE`: Default database name (optional)
 
 ### 3. Add to MCP settings
