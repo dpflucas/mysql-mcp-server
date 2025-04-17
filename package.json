@@ -1,6 +1,6 @@
 {
   "name": "mysql-mcp-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An MCP server that provides read-only access to MySQL databases.",
   "type": "module",
   "bin": {
