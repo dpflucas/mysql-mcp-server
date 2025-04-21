@@ -8,7 +8,13 @@
         "MYSQL_PORT": "3306",
         "MYSQL_USER": "your-mysql-user",
         "MYSQL_PASSWORD": "your-mysql-password",
-        "MYSQL_DATABASE": "your-default-database"
+        "MYSQL_DATABASE": "your-default-database",
+        
+        "MYSQL_CONNECTION_LIMIT": "10",
+        "MYSQL_QUEUE_LIMIT": "0",
+        "MYSQL_CONNECT_TIMEOUT": "10000",
+        "MYSQL_IDLE_TIMEOUT": "60000",
+        "MYSQL_MAX_IDLE": "10"
       },
       "disabled": false,
       "autoApprove": []

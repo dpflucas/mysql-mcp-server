@@ -5,11 +5,12 @@
 import mysql from 'mysql2/promise';
 import { MySQLConfig } from './types.js';
 
-// Default connection timeout in milliseconds
-const DEFAULT_TIMEOUT = 10000;
-
-// Default row limit for query results
-const DEFAULT_ROW_LIMIT = 1000;
+// Default connection pool configuration
+const DEFAULT_PORT = 3306;           // Default MySQL port
+const DEFAULT_TIMEOUT = 10000;       // Default connection timeout in milliseconds
+const DEFAULT_CONNECTION_LIMIT = 10; // Default maximum number of connections in the pool
+const DEFAULT_QUEUE_LIMIT = 0;       // Default maximum number of connection requests to queue (0 = unlimited)
+const DEFAULT_ROW_LIMIT = 1000;      // Default row limit for query results
 
 /**
  * Create a MySQL connection pool
@@ -18,15 +19,15 @@ export function createConnectionPool(config: MySQLConfig): mysql.Pool {
   console.error('[Setup] Creating MySQL connection pool');
   
   try {
-    // Create connection options
+    // Create connection options with defaults
     const poolConfig: mysql.PoolOptions = {
       host: config.host,
       port: config.port,
       user: config.user,
       waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-      connectTimeout: DEFAULT_TIMEOUT,
+      connectionLimit: config.connectionLimit ?? DEFAULT_CONNECTION_LIMIT,
+      queueLimit: config.queueLimit ?? DEFAULT_QUEUE_LIMIT,
+      connectTimeout: config.connectTimeout ?? DEFAULT_TIMEOUT,
     };
     
     // Add password if provided
@@ -37,6 +38,16 @@ export function createConnectionPool(config: MySQLConfig): mysql.Pool {
     // Add database if provided
     if (config.database) {
       poolConfig.database = config.database;
+    }
+    
+    // Add idleTimeout if provided
+    if (config.idleTimeout !== undefined) {
+      poolConfig.idleTimeout = config.idleTimeout;
+    }
+    
+    // Add maxIdle if provided
+    if (config.maxIdle !== undefined) {
+      poolConfig.maxIdle = config.maxIdle;
     }
     
     return mysql.createPool(poolConfig);
@@ -107,10 +118,35 @@ export function getConfigFromEnv(): MySQLConfig {
   const password = process.env.MYSQL_PASSWORD;
   const database = process.env.MYSQL_DATABASE;
   
+  // Connection pool options
+  const connectionLimitStr = process.env.MYSQL_CONNECTION_LIMIT;
+  const queueLimitStr = process.env.MYSQL_QUEUE_LIMIT;
+  const connectTimeoutStr = process.env.MYSQL_CONNECT_TIMEOUT;
+  const idleTimeoutStr = process.env.MYSQL_IDLE_TIMEOUT;
+  const maxIdleStr = process.env.MYSQL_MAX_IDLE;
+  
   if (!host) throw new Error('MYSQL_HOST environment variable is required');
   if (!user) throw new Error('MYSQL_USER environment variable is required');
   
-  const port = portStr ? parseInt(portStr, 10) : 3306;
+  const port = portStr ? parseInt(portStr, 10) : DEFAULT_PORT;
   
-  return { host, port, user, password, database };
+  // Parse connection pool options (all optional)
+  const connectionLimit = connectionLimitStr ? parseInt(connectionLimitStr, 10) : undefined;
+  const queueLimit = queueLimitStr ? parseInt(queueLimitStr, 10) : undefined;
+  const connectTimeout = connectTimeoutStr ? parseInt(connectTimeoutStr, 10) : undefined;
+  const idleTimeout = idleTimeoutStr ? parseInt(idleTimeoutStr, 10) : undefined;
+  const maxIdle = maxIdleStr ? parseInt(maxIdleStr, 10) : undefined;
+  
+  return { 
+    host, 
+    port, 
+    user, 
+    password, 
+    database,
+    connectionLimit,
+    queueLimit,
+    connectTimeout,
+    idleTimeout,
+    maxIdle
+  };
 }

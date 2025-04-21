@@ -25,6 +25,24 @@ startCommand:
       mysqlDatabase:
         type: string
         description: Default database (optional)
+      mysqlConnectionLimit:
+        type: number
+        default: 10
+        description: Maximum number of connections in the pool (optional)
+      mysqlQueueLimit:
+        type: number
+        default: 0
+        description: Maximum number of connection requests to queue (optional)
+      mysqlConnectTimeout:
+        type: number
+        default: 10000
+        description: Connection timeout in milliseconds (optional)
+      mysqlIdleTimeout:
+        type: number
+        description: How long a connection can be idle before being released in milliseconds (optional)
+      mysqlMaxIdle:
+        type: number
+        description: Maximum number of idle connections to keep in the pool (optional)
   commandFunction:
     # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
     |-
@@ -36,7 +54,12 @@ startCommand:
         MYSQL_PORT: config.mysqlPort ? config.mysqlPort.toString() : '3306',
         MYSQL_USER: config.mysqlUser,
         MYSQL_PASSWORD: config.mysqlPassword || '',
-        MYSQL_DATABASE: config.mysqlDatabase || ''
+        MYSQL_DATABASE: config.mysqlDatabase || '',
+        MYSQL_CONNECTION_LIMIT: config.mysqlConnectionLimit ? config.mysqlConnectionLimit.toString() : '',
+        MYSQL_QUEUE_LIMIT: config.mysqlQueueLimit ? config.mysqlQueueLimit.toString() : '',
+        MYSQL_CONNECT_TIMEOUT: config.mysqlConnectTimeout ? config.mysqlConnectTimeout.toString() : '',
+        MYSQL_IDLE_TIMEOUT: config.mysqlIdleTimeout ? config.mysqlIdleTimeout.toString() : '',
+        MYSQL_MAX_IDLE: config.mysqlMaxIdle ? config.mysqlMaxIdle.toString() : ''
       }
     })
   exampleConfig:
@@ -45,3 +68,8 @@ startCommand:
     mysqlUser: test_user
     mysqlPassword: test_password
     mysqlDatabase: test_db
+    mysqlConnectionLimit: 10
+    mysqlQueueLimit: 0
+    mysqlConnectTimeout: 10000
+    mysqlIdleTimeout: 60000
+    mysqlMaxIdle: 10

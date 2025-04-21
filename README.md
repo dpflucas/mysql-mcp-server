@@ -186,6 +186,45 @@ Executes a read-only SQL query.
 }
 ```
 
+## Advanced Connection Pool Configuration
+
+For more control over the MySQL connection pool behavior, you can configure additional parameters:
+
+```json
+{
+  "mcpServers": {
+    "mysql": {
+      "command": "npx",
+      "args": ["mysql-mcp-server"],
+      "env": {
+        "MYSQL_HOST": "your-mysql-host",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "your-mysql-user",
+        "MYSQL_PASSWORD": "your-mysql-password",
+        "MYSQL_DATABASE": "your-default-database",
+        
+        "MYSQL_CONNECTION_LIMIT": "10",
+        "MYSQL_QUEUE_LIMIT": "0",
+        "MYSQL_CONNECT_TIMEOUT": "10000",
+        "MYSQL_IDLE_TIMEOUT": "60000",
+        "MYSQL_MAX_IDLE": "10"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+These advanced options allow you to:
+
+- `MYSQL_CONNECTION_LIMIT`: Control the maximum number of connections in the pool (default: 10)
+- `MYSQL_QUEUE_LIMIT`: Set the maximum number of connection requests to queue (default: 0, unlimited)
+- `MYSQL_CONNECT_TIMEOUT`: Adjust the connection timeout in milliseconds (default: 10000)
+- `MYSQL_IDLE_TIMEOUT`: Configure how long a connection can be idle before being released (in milliseconds)
+- `MYSQL_MAX_IDLE`: Set the maximum number of idle connections to keep in the pool
+
+
 ## Testing
 
 The server includes test scripts to verify functionality with your MySQL setup:

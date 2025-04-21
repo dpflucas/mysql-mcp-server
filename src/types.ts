@@ -9,6 +9,13 @@ export interface MySQLConfig {
   user: string;
   password?: string;
   database?: string;
+  
+  // Connection pool options
+  connectionLimit?: number;
+  queueLimit?: number;
+  connectTimeout?: number;
+  idleTimeout?: number;
+  maxIdle?: number;
 }
 
 // Database information
