@@ -9,6 +9,7 @@ export interface MySQLConfig {
   user: string;
   password?: string;
   database?: string;
+  timezone?: string;
   
   // Connection pool options
   connectionLimit?: number;

@@ -28,6 +28,7 @@ export function createConnectionPool(config: MySQLConfig): mysql.Pool {
       connectionLimit: config.connectionLimit ?? DEFAULT_CONNECTION_LIMIT,
       queueLimit: config.queueLimit ?? DEFAULT_QUEUE_LIMIT,
       connectTimeout: config.connectTimeout ?? DEFAULT_TIMEOUT,
+      timezone: config.timezone ?? 'local',
     };
     
     // Add password if provided
@@ -117,6 +118,7 @@ export function getConfigFromEnv(): MySQLConfig {
   const user = process.env.MYSQL_USER;
   const password = process.env.MYSQL_PASSWORD;
   const database = process.env.MYSQL_DATABASE;
+  const timezone = process.env.MYSQL_TIMEZONE;
   
   // Connection pool options
   const connectionLimitStr = process.env.MYSQL_CONNECTION_LIMIT;
@@ -143,6 +145,7 @@ export function getConfigFromEnv(): MySQLConfig {
     user, 
     password, 
     database,
+    timezone,
     connectionLimit,
     queueLimit,
     connectTimeout,
