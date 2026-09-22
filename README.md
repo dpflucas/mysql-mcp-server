@@ -16,7 +16,7 @@ This MCP server provides read-only access to MySQL databases. It allows you to:
 
 ## Security Features
 
-- **Read-only access**: Only SELECT, SHOW, DESCRIBE, and EXPLAIN statements are allowed
+- **Read-only access**: Only SELECT, SHOW, DESCRIBE, and EXPLAIN statements are allowed; file-capable `SELECT INTO` and `LOAD_FILE` forms are rejected
 - **Query validation**: Prevents SQL injection and blocks any data modification attempts
 - **Query timeout**: Prevents long-running queries from consuming resources
 - **Row limit**: Prevents excessive data return
