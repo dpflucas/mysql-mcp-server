@@ -100,7 +100,7 @@ async function main() {
       query: 'SELECT * FROM users LIMIT 3'
     });
     console.log('Result:', JSON.stringify(queryResult, null, 2));
-    
+
     console.log('\nAll tests completed successfully!');
   } catch (error) {
     console.error('\n❌ Error:', error.message);
