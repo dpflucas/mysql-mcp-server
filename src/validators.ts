@@ -31,6 +31,7 @@ const DISALLOWED_COMMANDS = [
   'EXEC',
   'EXECUTE',
   'SET',
+  'INTO',
   'START',
   'BEGIN',
   'COMMIT',
@@ -61,6 +62,9 @@ export function isReadOnlyQuery(query: string): boolean {
     const regex = new RegExp(`(^|\\s)${cmd}(\\s|$)`);
     return regex.test(normalizedQuery);
   });
+
+  // LOAD_FILE reads server-side files when the account has FILE privilege.
+  const containsFileRead = /\bLOAD_FILE\s*\(/.test(normalizedQuery);
   
   // Check for multiple statements (;)
   const hasMultipleStatements = normalizedQuery.includes(';') && 
@@ -68,7 +72,7 @@ export function isReadOnlyQuery(query: string): boolean {
   
   // Query is read-only if it starts with an allowed command,
   // doesn't contain any disallowed commands, and doesn't have multiple statements
-  return startsWithAllowed && !containsDisallowed && !hasMultipleStatements;
+  return startsWithAllowed && !containsDisallowed && !containsFileRead && !hasMultipleStatements;
 }
 
 /**

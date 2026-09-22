@@ -14,9 +14,10 @@
     "prepare": "npm run build",
     "watch": "tsc --watch",
     "inspector": "npx @modelcontextprotocol/inspector build/index.js",
+    "test:validators": "npm run build && node test-validators.js",
     "test:setup": "node test-setup.js",
     "test:tools": "node test-tools.js",
-    "test": "npm run test:setup && npm run test:tools"
+    "test": "npm run test:validators && npm run test:setup && npm run test:tools"
   },
   "keywords": [
     "mcp",
