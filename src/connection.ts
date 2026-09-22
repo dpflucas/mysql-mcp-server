@@ -25,6 +25,8 @@ export function createConnectionPool(config: MySQLConfig): mysql.Pool {
       port: config.port,
       user: config.user,
       waitForConnections: true,
+      supportBigNumbers: true,
+      bigNumberStrings: true,
       connectionLimit: config.connectionLimit ?? DEFAULT_CONNECTION_LIMIT,
       queueLimit: config.queueLimit ?? DEFAULT_QUEUE_LIMIT,
       connectTimeout: config.connectTimeout ?? DEFAULT_TIMEOUT,

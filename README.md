@@ -20,6 +20,7 @@ This MCP server provides read-only access to MySQL databases. It allows you to:
 - **Query validation**: Prevents SQL injection and blocks any data modification attempts
 - **Query timeout**: Prevents long-running queries from consuming resources
 - **Row limit**: Prevents excessive data return
+- **Exact large numbers**: BIGINT and DECIMAL values are returned as strings to prevent precision loss
 
 ## Installation
 

@@ -101,9 +101,23 @@ async function main() {
     });
     console.log('Result:', JSON.stringify(queryResult, null, 2));
 
+    // Verify BIGINT values are returned exactly rather than rounded by JavaScript.
+    console.log('\n5. Testing BIGINT precision...');
+    const bigintResult = await callTool(server, 'execute_query', {
+      database: config.database,
+      query: "SELECT snowflake_id FROM users WHERE name = 'John Doe'"
+    });
+    const expectedSnowflakeId = '1567417727310704641';
+    const actualSnowflakeId = bigintResult[0]?.snowflake_id;
+    if (actualSnowflakeId !== expectedSnowflakeId) {
+      throw new Error(`BIGINT precision lost: expected ${expectedSnowflakeId}, got ${actualSnowflakeId}`);
+    }
+    console.log(`Exact BIGINT value preserved: ${actualSnowflakeId}`);
+
     console.log('\nAll tests completed successfully!');
   } catch (error) {
-    console.error('\n❌ Error:', error.message);
+    console.error('\nError:', error.message);
+    process.exitCode = 1;
   } finally {
     // Kill the server
     server.kill();

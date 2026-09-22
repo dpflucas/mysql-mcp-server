@@ -155,6 +155,7 @@ async function createTestTable() {
       name VARCHAR(100) NOT NULL,
       email VARCHAR(100) NOT NULL,
       age INT,
+      snowflake_id BIGINT NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
@@ -167,17 +168,17 @@ async function insertSampleData() {
   await pool.query(`USE ${TEST_DB}`);
   
   const users = [
-    { name: 'John Doe', email: 'john@example.com', age: 30 },
-    { name: 'Jane Smith', email: 'jane@example.com', age: 25 },
-    { name: 'Bob Johnson', email: 'bob@example.com', age: 40 },
-    { name: 'Alice Brown', email: 'alice@example.com', age: 35 },
-    { name: 'Charlie Davis', email: 'charlie@example.com', age: 28 },
+    { name: 'John Doe', email: 'john@example.com', age: 30, snowflakeId: '1567417727310704641' },
+    { name: 'Jane Smith', email: 'jane@example.com', age: 25, snowflakeId: '1567417727310704642' },
+    { name: 'Bob Johnson', email: 'bob@example.com', age: 40, snowflakeId: '1567417727310704643' },
+    { name: 'Alice Brown', email: 'alice@example.com', age: 35, snowflakeId: '1567417727310704644' },
+    { name: 'Charlie Davis', email: 'charlie@example.com', age: 28, snowflakeId: '1567417727310704645' },
   ];
   
   for (const user of users) {
     await pool.query(
-      `INSERT INTO ${TEST_TABLE} (name, email, age) VALUES (?, ?, ?)`,
-      [user.name, user.email, user.age]
+      `INSERT INTO ${TEST_TABLE} (name, email, age, snowflake_id) VALUES (?, ?, ?, ?)`,
+      [user.name, user.email, user.age, user.snowflakeId]
     );
   }
 }
