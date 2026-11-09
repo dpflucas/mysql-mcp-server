@@ -36,6 +36,9 @@ const DISALLOWED_COMMANDS = [
   'BEGIN',
   'COMMIT',
   'ROLLBACK',
+  'OUTFILE',
+  'DUMPFILE',
+  'LOAD_FILE'
 ];
 
 /**
