@@ -71,6 +71,8 @@ export async function executeQuery(
   console.error(`[Query] Executing: ${sql}`);
 
   let connection: mysql.PoolConnection | null = null;
+  let timer: NodeJS.Timeout | undefined;
+  let timedOut = false;
 
   try {
     // Get connection from pool
@@ -86,7 +88,10 @@ export async function executeQuery(
     const [rows, fields] = await Promise.race([
       connection.query(sql, params),
       new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Query timeout')), DEFAULT_TIMEOUT);
+        timer = setTimeout(() => {
+          timedOut = true;
+          reject(new Error('Query timeout'));
+        }, DEFAULT_TIMEOUT);
       }),
     ]);
 
@@ -103,9 +108,15 @@ export async function executeQuery(
     console.error('[Error] Query execution failed:', error);
     throw error;
   } finally {
-    // Release connection back to pool
+    clearTimeout(timer);
     if (connection) {
-      connection.release();
+      if (timedOut) {
+        // The query is still pending on this socket (e.g. dead after a VPN drop);
+        // returning it to the pool would make the next queries queue behind it.
+        connection.destroy();
+      } else {
+        connection.release();
+      }
     }
   }
 }
